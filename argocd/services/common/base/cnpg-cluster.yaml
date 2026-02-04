@@ -1,0 +1,34 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: cnpg-cluster
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: "-1"
+spec:
+  # https://github.com/voltade/voltade-os/pkgs/container/postgres
+  imageName: ghcr.io/voltade/postgres:17.5-20250805-859fe66
+  instances: 1
+  certificates:
+    serverCASecret: postgres-server-tls
+    serverTLSSecret: postgres-server-tls
+  storage:
+    size: 4Gi
+  postgresql:
+    parameters:
+      wal_level: logical
+      max_wal_senders: "10"
+      max_replication_slots: "10"
+      wal_keep_size: "2048MB"
+      pgsodium.enable_event_trigger: "off"
+      pgsodium.getkey_script: /usr/share/postgresql/17/extension/pgsodium_getkey
+    shared_preload_libraries:
+      - supabase_vault
+  managed:
+    roles:
+      - name: admin
+        login: true
+        superuser: true
+        replication: true
+        passwordSecret:
+          name: cnpg-cluster-admin

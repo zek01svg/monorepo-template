@@ -1,0 +1,40 @@
+# https://github.com/traefik/traefik-helm-chart/blob/master/traefik/values.yaml
+global:
+  checkNewVersion: false
+  sendAnonymousUsage: false
+
+additionalArguments:
+  - "--entryPoints.postgres.address=:5432/tcp"
+
+# 30000-32767
+ports:
+  web:
+    expose:
+      default: false
+  websecure:
+    expose:
+      default: false
+  smtp:
+    port: 1025
+    nodePort: 30025
+    expose:
+      default: true
+    protocol: TCP
+  postgres:
+    port: 5432
+    nodePort: 30432
+    expose:
+      default: true
+    protocol: TCP
+  kafka:
+    port: 9094
+    nodePort: 30094
+    expose:
+      default: true
+    protocol: TCP
+
+service:
+  type: NodePort
+
+gateway:
+  enabled: false

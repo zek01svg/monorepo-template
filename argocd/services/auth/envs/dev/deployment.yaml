@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: socat-auth
+  labels:
+    app: socat-auth
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: socat-auth
+  template:
+    metadata:
+      labels:
+        app: socat-auth
+    spec:
+      containers:
+        - name: socat-auth
+          image: alpine/socat:1.8.0.3
+          args:
+            - "-d"
+            - "TCP4-LISTEN:4000,fork,reuseaddr"
+            - "TCP4:host.docker.internal:4000"
+          ports:
+            - name: http-4000
+              containerPort: 4000
+          resources:
+            requests:
+              memory: 16Mi
+              cpu: 50m
+            limits:
+              memory: 32Mi
+              cpu: 100m

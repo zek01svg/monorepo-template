@@ -1,0 +1,19 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - certificate.yaml
+  - cluster-secret-store.yaml
+  - cnpg-cluster-admin.yaml
+  - cnpg-cluster.yaml
+  - cnpg-route.yaml
+
+helmCharts:
+  - repo: oci://registry.127.0.0.1.nip.io
+    name: drizzle-gateway
+    version: 0.1.4
+    releaseName: drizzle-gateway
+    namespace: services
+    valuesInline:
+      image:
+        tag: 1.0.2

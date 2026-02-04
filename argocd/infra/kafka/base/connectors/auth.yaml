@@ -1,0 +1,28 @@
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaConnector
+metadata:
+  name: kafka-connector-auth
+  labels:
+    strimzi.io/cluster: kafka-connect-cluster
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  class: io.debezium.connector.postgresql.PostgresConnector
+  tasksMax: 1
+  config:
+    tasks.max: 1
+    plugin.name: pgoutput
+    database.server.id: 184054
+    database.hostname: cnpg-cluster-rw.services.svc.cluster.local
+    database.port: 5432
+    database.user: ${secrets:services/cnpg-cluster-admin:username}
+    database.password: ${secrets:services/cnpg-cluster-admin:password}
+    database.dbname: auth
+    topic.prefix: auth
+    slot.name: debezium_auth
+    publication.name: debezium_auth_publication
+    publication.autocreate.mode: all_tables
+    snapshot.mode: when_needed
+    slot.drop.on.stop: true
+    tombstones.on.delete: false
+    schema.history.internal.kafka.bootstrap.servers: kafka-cluster-kafka-bootstrap:9092
+    schema.history.internal.kafka.topic: schema-changes.auth

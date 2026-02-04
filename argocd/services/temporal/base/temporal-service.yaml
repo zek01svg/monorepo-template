@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: temporal
+  labels:
+    app: temporal
+spec:
+  type: ClusterIP
+  ports:
+    - port: 7233
+      targetPort: 7233
+      name: temporal
+      appProtocol: kubernetes.io/h2c
+  selector:
+    app: temporal

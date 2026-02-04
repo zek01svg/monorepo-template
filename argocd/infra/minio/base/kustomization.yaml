@@ -1,0 +1,22 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+helmCharts:
+  - repo: oci://registry-1.docker.io/bitnamicharts
+    name: minio
+    # https://artifacthub.io/packages/helm/bitnami/minio
+    version: 17.0.11
+    releaseName: minio
+    namespace: minio
+
+resources:
+  - httproute.yaml
+
+patches:
+  - target:
+      kind: Secret
+      name: minio
+    patch: |-
+      - op: add
+        path: /metadata/annotations/reflector.v1.k8s.emberstack.com~1reflection-allowed
+        value: "true"

@@ -1,0 +1,46 @@
+{
+  "name": "@repo/{{name}}",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "exports": {
+    ".": "./src/types.ts"
+  },
+  "scripts": {
+    "build": "esbuild src/index.ts --bundle --platform=node --outfile=dist/index.cjs",
+    "docker:build": "docker build -t registry.127.0.0.1.nip.io/repo-{{name}}:latest -f Dockerfile ../../../",
+    "docker:push": "docker image push registry.127.0.0.1.nip.io/repo-{{name}}:latest",
+    "clean": "git clean -xdf .cache .turbo dist node_modules coverage.json",
+    "dev": "pnpm with-env tsx watch src/index.ts",
+    "format": "prettier --check . --ignore-path ../../../.gitignore",
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false",
+    "with-env": "dotenv -e ../../../.env",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@repo/prettier-config": "workspace:*",
+    "@repo/tsconfig": "workspace:*",
+    "@repo/vitest": "workspace:*",
+    "dotenv-cli": "^7.4.2",
+    "esbuild": "^0.24.2",
+    "eslint": "catalog:",
+    "prettier": "catalog:",
+    "tsx": "catalog:",
+    "typescript": "catalog:"
+  },
+  "prettier": "@repo/prettier-config",
+  "dependencies": {
+    "@hono/node-server": "^1.14.4",
+    "@hono/zod-openapi": "^1.0.2",
+    "@repo/auth-common": "workspace:^",
+    "@repo/db-auth": "workspace:^",
+    "@repo/service-discovery": "workspace:^",
+    "@scalar/hono-api-reference": "^0.9.12",
+    "@t3-oss/env-core": "catalog:",
+    "hono": "catalog:",
+    "vitest": "catalog:vitest",
+    "zod": "catalog:"
+  }
+}

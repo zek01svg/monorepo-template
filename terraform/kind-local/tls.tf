@@ -1,0 +1,89 @@
+resource "tls_private_key" "ca" {
+  algorithm = "RSA"
+  rsa_bits  = 2048
+}
+
+resource "tls_self_signed_cert" "ca" {
+  private_key_pem = tls_private_key.ca.private_key_pem
+
+  subject {
+    organization = "Local"
+    common_name  = local.wildcard_hostname
+  }
+
+  is_ca_certificate     = true
+  validity_period_hours = 131400 // 15 years
+  allowed_uses = [
+    "cert_signing",
+    "key_encipherment",
+    "digital_signature"
+  ]
+}
+
+resource "kubernetes_namespace" "cert_manager" {
+  metadata {
+    name = "cert-manager"
+  }
+}
+
+resource "kubernetes_secret" "selfsigned_ca" {
+  metadata {
+    name      = "selfsigned-ca"
+    namespace = kubernetes_namespace.cert_manager.metadata[0].name
+    annotations = {
+      "reflector.v1.k8s.emberstack.com/reflection-allowed": "true"
+    }
+  }
+  type = "kubernetes.io/tls"
+  data = {
+    "tls.crt" = tls_self_signed_cert.ca.cert_pem
+    "tls.key" = tls_private_key.ca.private_key_pem
+  }
+}
+
+resource "local_file" "selfsigned_ca" {
+  content         = tls_self_signed_cert.ca.cert_pem
+  filename        = "${path.root}/certs/ca.crt"
+  file_permission = "0644"
+}
+
+
+resource "tls_private_key" "registry" {
+  algorithm = "RSA"
+  rsa_bits  = 2048
+}
+
+resource "tls_cert_request" "registry" {
+  private_key_pem = tls_private_key.registry.private_key_pem
+  subject {
+    organization = "Local"
+    common_name  = local.wildcard_hostname
+  }
+  dns_names    = concat([local.wildcard_hostname], var.additional_registry_dns_names)
+  ip_addresses = [local.registry_ip]
+}
+
+resource "tls_locally_signed_cert" "registry" {
+  cert_request_pem      = tls_cert_request.registry.cert_request_pem
+  ca_private_key_pem    = tls_private_key.ca.private_key_pem
+  ca_cert_pem           = tls_self_signed_cert.ca.cert_pem
+  validity_period_hours = 8760 // 1 years
+  allowed_uses = [
+    "key_encipherment",
+    "digital_signature",
+    "server_auth",
+    "client_auth"
+  ]
+}
+
+resource "local_file" "registry_tls_key" {
+  content         = tls_private_key.registry.private_key_pem
+  filename        = "${path.root}/certs/registry.key"
+  file_permission = "0600"
+}
+
+resource "local_file" "registry_tls_crt" {
+  content         = tls_locally_signed_cert.registry.cert_pem
+  filename        = "${path.root}/certs/registry.crt"
+  file_permission = "0644"
+}

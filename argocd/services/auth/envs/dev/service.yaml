@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: socat-auth
+spec:
+  selector:
+    app: socat-auth
+  ports:
+    - name: http-4000
+      protocol: TCP
+      port: 4000

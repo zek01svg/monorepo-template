@@ -1,0 +1,43 @@
+{
+  "name": "@repo/analytics",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "exports": {
+    ".": "./src/types.ts"
+  },
+  "scripts": {
+    "build": "esbuild src/index.ts --bundle --platform=node --outfile=dist/index.cjs",
+    "docker:build": "docker build -t registry.127.0.0.1.nip.io/repo-analytics:latest -f Dockerfile ../../../",
+    "docker:push": "docker image push registry.127.0.0.1.nip.io/repo-analytics:latest",
+    "clean": "git clean -xdf .cache .turbo dist node_modules coverage.json",
+    "dev": "pnpm with-env tsx watch src/index.ts",
+    "format": "prettier --check . --ignore-path ../../../.gitignore",
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false",
+    "with-env": "dotenv -e ../../../.env",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@repo/db-auth": "workspace:^",
+    "@repo/eslint-config": "workspace:*",
+    "@repo/prettier-config": "workspace:*",
+    "@repo/tsconfig": "workspace:*",
+    "@repo/vitest": "workspace:*",
+    "dotenv-cli": "^7.4.2",
+    "esbuild": "^0.24.2",
+    "eslint": "catalog:",
+    "prettier": "catalog:",
+    "tsx": "catalog:",
+    "typescript": "catalog:"
+  },
+  "prettier": "@repo/prettier-config",
+  "dependencies": {
+    "@repo/auth-common": "workspace:^",
+    "@repo/kafka": "workspace:^",
+    "@repo/service-discovery": "workspace:^",
+    "@t3-oss/env-core": "catalog:",
+    "vitest": "catalog:vitest",
+    "zod": "catalog:"
+  }
+}

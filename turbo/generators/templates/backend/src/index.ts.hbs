@@ -1,0 +1,30 @@
+import { serve } from "@hono/node-server";
+import { Scalar } from "@scalar/hono-api-reference";
+
+import { createApp } from "./factory";
+import { helloRoute } from "./routes/hello";
+
+const app = createApp()
+  .doc("/openapi", {
+    openapi: "3.0.0",
+    info: {
+      version: "1.0.0",
+      title: "{{name}} API",
+    },
+  })
+  .get("/docs", Scalar({ url: "/openapi" }))
+  .get("/health", (c) =>
+    c.json({
+      ok: true,
+      service: "{{name}}",
+      timestamp: new Date().toISOString(),
+    }),
+  )
+  .get("/", (c) => c.json({ message: "Hello, world!" }))
+  .route("/hello", helloRoute);
+
+export { app };
+
+serve({ port: {{ port }}, fetch: app.fetch });
+
+console.log("🚀 {{name}} running on http://localhost:{{port}}");

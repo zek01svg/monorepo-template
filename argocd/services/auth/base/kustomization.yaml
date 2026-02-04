@@ -1,0 +1,44 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+helmCharts:
+  - repo: oci://registry.127.0.0.1.nip.io
+    name: service
+    version: 0.1.1
+    releaseName: auth
+    namespace: services
+    valuesInline:
+      image:
+        pullPolicy: Always
+        repository: registry.127.0.0.1.nip.io/repo-auth
+        tag: latest
+      service:
+        port: 3000
+      livenessProbe:
+        httpGet:
+          path: /health
+          port: http
+      readinessProbe:
+        httpGet:
+          path: /health
+          port: http
+      environment:
+        DB_USER:
+          valueFrom:
+            secretKeyRef:
+              name: cnpg-cluster-admin
+              key: username
+        DB_PASSWORD:
+          valueFrom:
+            secretKeyRef:
+              name: cnpg-cluster-admin
+              key: password
+        DB_NAME: auth
+        DB_HOST: cnpg-cluster-rw
+        AUTH_POSTGRES_URL: "postgresql://$(DB_USER):$(DB_PASSWORD)@$(DB_HOST):5432/$(DB_NAME)"
+      envFrom:
+        - secretRef:
+            name: mailer-secret
+
+resources:
+  - cnpg-database.yaml

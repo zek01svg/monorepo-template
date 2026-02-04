@@ -1,0 +1,47 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../base
+
+patches:
+  - target:
+      kind: Deployment
+      name: temporal-ui
+    patch: |-
+      - op: replace
+        path: /spec/template/spec/containers/0/env
+        value:
+          - name: TEMPORAL_ADDRESS
+            value: "temporal:7233"
+          - name: TEMPORAL_CORS_ORIGINS
+            value: "https://temporal.jknl.dev"
+          - name: TEMPORAL_AUTH_ENABLED
+            value: "true"
+          - name: TEMPORAL_AUTH_TYPE
+            value: "oidc"
+          - name: TEMPORAL_AUTH_PROVIDER_URL
+            valueFrom:
+              secretKeyRef:
+                name: temporal-oidc-secret
+                key: providerURL
+          - name: TEMPORAL_AUTH_CLIENT_ID
+            valueFrom:
+              secretKeyRef:
+                name: temporal-oidc-secret
+                key: clientID
+          - name: TEMPORAL_AUTH_CLIENT_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: temporal-oidc-secret
+                key: clientSecret
+          - name: TEMPORAL_AUTH_CALLBACK_URL
+            valueFrom:
+              secretKeyRef:
+                name: temporal-oidc-secret
+                key: callbackURL
+          - name: TEMPORAL_AUTH_SCOPES
+            valueFrom:
+              secretKeyRef:
+                name: temporal-oidc-secret
+                key: scopes

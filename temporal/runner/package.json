@@ -1,0 +1,37 @@
+{
+  "name": "@repo/temporal-runner",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "build": "tsc",
+    "clean": "git clean -xdf .cache .turbo dist node_modules coverage.json",
+    "dev": "pnpm with-env tsx src/index.ts --watch",
+    "start": "pnpm with-env tsx src/index.ts",
+    "format": "prettier --check . --ignore-path ../../.gitignore",
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false",
+    "test": "vitest run",
+    "with-env": "dotenv -e ../../.env --"
+  },
+  "dependencies": {
+    "@repo/temporal-activities": "workspace:*",
+    "@repo/temporal-common": "workspace:*",
+    "@repo/temporal-workflow": "workspace:*",
+    "@temporalio/worker": "^1.12.1",
+    "vitest": "catalog:vitest"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@repo/prettier-config": "workspace:*",
+    "@repo/tsconfig": "workspace:*",
+    "@repo/vitest": "workspace:*",
+    "eslint": "catalog:",
+    "prettier": "catalog:",
+    "typescript": "catalog:"
+  },
+  "prettier": "@repo/prettier-config"
+}

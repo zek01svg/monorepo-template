@@ -1,0 +1,44 @@
+packages:
+  - apps/backend/*
+  - apps/frontend/*
+  - apps/internal/*
+  - orms/*
+  - packages/*
+  - temporal/*
+  - tooling/*
+catalog:
+  eslint: ^9.28.0
+  prettier: ^3.5.3
+  tailwindcss: ^4.1.12
+  "@tailwindcss/vite": ^4.1.12
+  "@tailwindcss/postcss": ^4.1.12
+  tw-animate-css: ^1.3.6
+  typescript: ^5.8.3
+  zod: ^4.0.0
+  dotenv-cli: ^8.0.0
+  "@tanstack/react-query": ^5.80.7
+  "@trpc/client": ^11.4.0
+  "@trpc/tanstack-react-query": ^11.4.0
+  "@trpc/server": ^11.4.0,
+  "@t3-oss/env-core": ^0.13.8
+  glob: ^11.0.1
+  tsx: ^4.20.0
+  better-auth: ^1.3.7
+  hono: ^4.9.1
+  kafkajs: ^2.2.4
+catalogs:
+  react19:
+    react: 19.1.0
+    react-dom: 19.1.0
+    "@types/react": ^19.1.6
+    "@types/react-dom": ^19.1.5
+  vitest:
+    vitest: ^3.2.4
+    "@vitest/coverage-istanbul": ^3.2.4
+    "@vitest/ui": ^3.2.4
+onlyBuiltDependencies:
+  - bufferutil
+  - core-js-pure
+  - esbuild
+  - sharp
+  - utf-8-validate

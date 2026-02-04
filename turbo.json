@@ -1,0 +1,89 @@
+{
+  "$schema": "https://turborepo.org/schema.json",
+  "ui": "tui",
+  "tasks": {
+    "auth:generate": {
+      "cache": false,
+      "persistent": false,
+      "interactive": true
+    },
+    "topo": {
+      "dependsOn": ["^topo"]
+    },
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": [".cache/tsbuildinfo.json", "dist/**"]
+    },
+    "dev": {
+      "dependsOn": ["^dev"],
+      "cache": false,
+      "persistent": false
+    },
+    "format": {
+      "outputs": [".cache/.prettiercache"],
+      "outputLogs": "new-only"
+    },
+    "lint": {
+      "dependsOn": ["^topo", "^build"],
+      "outputs": [".cache/.eslintcache"]
+    },
+    "typecheck": {
+      "dependsOn": ["^topo", "^build"],
+      "outputs": [".cache/tsbuildinfo.json"]
+    },
+    "clean": {
+      "cache": false
+    },
+    "//#clean": {
+      "cache": false
+    },
+    "db:push": {
+      "cache": false,
+      "interactive": true
+    },
+    "db:seed": {
+      "cache": false,
+      "interactive": true
+    },
+    "docker:build": {
+      "cache": false,
+      "persistent": false
+    },
+    "docker:push": {
+      "cache": false,
+      "persistent": false
+    },
+    "ui-add": {
+      "cache": false,
+      "interactive": true
+    },
+    "build:docker": {
+      "cache": false,
+      "persistent": false
+    },
+    "test": {
+      "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/vitest.config.ts"],
+      "dependsOn": ["transit", "@repo/vitest#build"],
+      "outputs": ["coverage.json"]
+    },
+    "transit": {
+      "dependsOn": ["^transit"]
+    }
+  },
+  "globalEnv": [
+    "AUTH_POSTGRES_URL",
+    "AUTH_SECRET",
+    "PORT",
+    "TEMPORAL_NAMESPACE",
+    "TEMPORAL_SERVER"
+  ],
+  "globalPassThroughEnv": [
+    "NODE_ENV",
+    "CI",
+    "VERCEL",
+    "VERCEL_ENV",
+    "VERCEL_URL",
+    "npm_lifecycle_event",
+    "NODE_TLS_REJECT_UNAUTHORIZED"
+  ]
+}

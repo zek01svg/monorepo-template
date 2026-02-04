@@ -1,0 +1,12 @@
+import { pgTable, text, timestamp } from "drizzle-orm/pg-core";
+
+export const test = pgTable("test", {
+  id: text("id").primaryKey(),
+  content: text("content").notNull(),
+  createdAt: timestamp("created_at")
+    .$defaultFn(() => /* @__PURE__ */ new Date())
+    .notNull(),
+  updatedAt: timestamp("updated_at")
+    .$defaultFn(() => /* @__PURE__ */ new Date())
+    .notNull(),
+});

@@ -1,0 +1,42 @@
+# https://github.com/argoproj/argo-helm/blob/main/charts/argo-cd/values.yaml
+configs:
+  params:
+    # https://github.com/argoproj/argo-cd/issues/2953#issuecomment-1565944622
+    server.insecure: true
+  cm:
+    admin.enabled: true
+    users.anonymous.enabled: false
+    kustomize.buildOptions: "--enable-helm"
+    resource.exclusions: |
+      - apiGroups:
+        - cilium.io
+        kinds:
+        - CiliumIdentity
+        clusters:
+        - "*"
+
+  secret:
+    argocdServerAdminPassword: $2a$10$ekZY6VP1UuhNlhQ8.kCNqe5rn94jO4ivz2vzO1slot1X3sNmZmObe # admin
+
+server:
+  ingress:
+    enabled: false
+
+repoServer:
+  env:
+    # https://github.com/argoproj/argo-cd/issues/13726#issuecomment-2733477259
+    - name: SSL_CERT_DIR
+      value: /mnt/ca-certificates
+  volumeMounts:
+    - name: monorepo-template
+      mountPath: /mnt/monorepo-template.git
+    - name: extra-ca
+      mountPath: /mnt/ca-certificates
+  volumes:
+    - name: monorepo-template
+      hostPath:
+        path: /mnt/monorepo-template.git
+        type: Directory
+    - name: extra-ca
+      configMap:
+        name: argocd-tls-certs-cm

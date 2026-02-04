@@ -1,0 +1,27 @@
+# https://github.com/argoproj/argo-helm/blob/main/charts/argo-cd/values.yaml
+configs:
+  params:
+    # https://github.com/argoproj/argo-cd/issues/2953#issuecomment-1565944622
+    server.insecure: true
+  cm:
+    admin.enabled: true
+    users.anonymous.enabled: false
+    kustomize.buildOptions: "--enable-helm"
+    resource.exclusions: |
+      - apiGroups:
+        - cilium.io
+        kinds:
+        - CiliumIdentity
+        clusters:
+        - "*"
+    oidc.config: |
+      name: BetterAuth
+      issuer: $argocd-oidc-secret:oidc.better-auth.issuer
+      clientSecret: $argocd-oidc-secret:oidc.better-auth.clientSecret
+      clientID: $argocd-oidc-secret:oidc.better-auth.clientID
+      allowedAudiences: 
+        - $argocd-oidc-secret:oidc.better-auth.allowedAudience
+
+server:
+  ingress:
+    enabled: false
