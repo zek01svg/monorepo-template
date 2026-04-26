@@ -1,6 +1,7 @@
 {
   "extends": "@repo/tsconfig/internal-package.json",
   "compilerOptions": {
+    "rootDir": ".",
     "paths": {
       "~/*": ["./src/*"]
     }

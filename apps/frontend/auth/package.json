@@ -16,8 +16,9 @@
     "dev:server": "pnpm with-env tsx watch server/index.ts",
     "dev:vite": "wait-on http://localhost:4001/health && pnpm with-env vite --host",
     "dev": "concurrently \"pnpm dev:server\" \"pnpm dev:vite\"",
-    "format": "prettier --check . --ignore-path ../../../.gitignore",
-    "lint": "eslint",
+    "format": "oxfmt --check",
+    "format:fix": "oxfmt --write .",
+    "lint": "oxlint --type-aware -c ../../../tooling/eslint/oxlint.json",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false",
     "with-env": "dotenv -e ../../../.env --",
     "test": "vitest run"
@@ -39,8 +40,6 @@
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@repo/eslint-config": "workspace:*",
-    "@repo/prettier-config": "workspace:*",
     "@repo/tsconfig": "workspace:*",
     "@repo/ui": "workspace:*",
     "@repo/vitest": "workspace:*",
@@ -53,10 +52,8 @@
     "@vitejs/plugin-react": "^4.3.4",
     "concurrently": "^9.2.0",
     "dotenv-cli": "catalog:",
-    "eslint": "catalog:",
     "eslint-plugin-react-hooks": "^5.0.0",
     "globals": "^15.14.0",
-    "prettier": "catalog:",
     "tailwindcss": "catalog:",
     "tw-animate-css": "catalog:",
     "typescript": "catalog:",

@@ -9,8 +9,9 @@
   },
   "scripts": {
     "clean": "git clean -xdf .cache .turbo dist node_modules coverage.json",
-    "format": "prettier --check . --ignore-path ../../.gitignore",
-    "lint": "eslint",
+    "format": "oxfmt --check",
+    "format:fix": "oxfmt --write .",
+    "lint": "oxlint --type-aware -c ../../tooling/eslint/oxlint.json",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false",
     "ui-add": "pnpm dlx shadcn@latest add && prettier src --write --list-different"
   },
@@ -60,13 +61,9 @@
     "vaul": "^1.1.2"
   },
   "devDependencies": {
-    "@repo/eslint-config": "workspace:*",
-    "@repo/prettier-config": "workspace:*",
     "@repo/tsconfig": "workspace:*",
     "@tailwindcss/postcss": "catalog:",
     "@types/react": "catalog:react19",
-    "eslint": "catalog:",
-    "prettier": "catalog:",
     "react": "catalog:react19",
     "tailwindcss": "catalog:",
     "typescript": "catalog:",

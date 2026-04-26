@@ -26,10 +26,10 @@
     "docker:build": "turbo run docker:build",
     "docker:push": "turbo run docker:push",
     "docker": "./scripts/docker-build-push.sh",
-    "format": "turbo run format --continue -- --cache --cache-location .cache/.prettiercache",
-    "format:fix": "turbo run format --continue -- --write --cache --cache-location .cache/.prettiercache",
-    "lint": "turbo run lint --continue -- --cache --cache-location .cache/.eslintcache",
-    "lint:fix": "turbo run lint --continue -- --fix --cache --cache-location .cache/.eslintcache",
+    "format": "turbo run format --continue",
+    "format:fix": "turbo run format:fix --continue",
+    "lint": "turbo run lint --continue",
+    "lint:fix": "turbo run lint --continue -- --fix",
     "lint:ws": "pnpm dlx sherif@latest",
     "postinstall": "pnpm lint:ws",
     "typecheck": "turbo run typecheck",
@@ -40,17 +40,18 @@
     "test:view": "turbo run view-report"
   },
   "devDependencies": {
-    "@inquirer/prompts": "^7.8.0",
-    "@repo/prettier-config": "workspace:*",
+    "@inquirer/prompts": "^8.4.2",
     "@repo/vitest": "workspace:*",
-    "@turbo/gen": "^2.5.4",
+    "@turbo/gen": "^2.9.6",
     "glob": "catalog:",
-    "prettier": "catalog:",
-    "semver": "^7.6.3",
+    "oxfmt": "^0.46.0",
+    "oxlint": "^1.61.0",
+    "oxlint-tsgolint": "^0.22.0",
+    "semver": "^7.7.4",
     "tsx": "catalog:",
-    "turbo": "^2.5.4",
+    "turbo": "^2.9.6",
     "typescript": "catalog:",
-    "yaml": "^2.6.1"
+    "yaml": "^2.8.3"
   },
   "prettier": "@repo/prettier-config"
 }

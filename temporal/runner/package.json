@@ -11,8 +11,9 @@
     "clean": "git clean -xdf .cache .turbo dist node_modules coverage.json",
     "dev": "pnpm with-env tsx src/index.ts --watch",
     "start": "pnpm with-env tsx src/index.ts",
-    "format": "prettier --check . --ignore-path ../../.gitignore",
-    "lint": "eslint",
+    "format": "oxfmt --check",
+    "format:fix": "oxfmt --write .",
+    "lint": "oxlint --type-aware -c ../../tooling/eslint/oxlint.json",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false",
     "test": "vitest run",
     "with-env": "dotenv -e ../../.env --"
@@ -25,12 +26,8 @@
     "vitest": "catalog:vitest"
   },
   "devDependencies": {
-    "@repo/eslint-config": "workspace:*",
-    "@repo/prettier-config": "workspace:*",
     "@repo/tsconfig": "workspace:*",
     "@repo/vitest": "workspace:*",
-    "eslint": "catalog:",
-    "prettier": "catalog:",
     "typescript": "catalog:"
   },
   "prettier": "@repo/prettier-config"

@@ -10,8 +10,9 @@
     "build": "tsc",
     "clean": "git clean -xdf .cache .turbo dist node_modules coverage.json",
     "dev": "tsc",
-    "format": "prettier --check . --ignore-path ../../.gitignore",
-    "lint": "eslint",
+    "format": "oxfmt --check",
+    "format:fix": "oxfmt --write .",
+    "lint": "oxlint --type-aware -c ../../tooling/eslint/oxlint.json",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false",
     "test": "vitest run"
   },
@@ -19,12 +20,8 @@
     "kafkajs": "catalog:"
   },
   "devDependencies": {
-    "@repo/eslint-config": "workspace:*",
-    "@repo/prettier-config": "workspace:*",
     "@repo/tsconfig": "workspace:*",
     "@repo/vitest": "workspace:*",
-    "eslint": "catalog:",
-    "prettier": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:vitest"
   },

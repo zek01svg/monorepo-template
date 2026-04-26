@@ -12,8 +12,9 @@
   },
   "scripts": {
     "clean": "git clean -xdf .cache .turbo dist node_modules coverage.json",
-    "format": "prettier --check . --ignore-path ../../.gitignore",
-    "lint": "eslint",
+    "format": "oxfmt --check",
+    "format:fix": "oxfmt --write .",
+    "lint": "oxlint --type-aware -c ../../tooling/eslint/oxlint.json",
     "auth:generate": "dotenv -e ../../.env -- pnpx @better-auth/cli generate --output ../../orms/db-auth/src/schema.ts --config src/auth.ts",
     "typecheck": "tsc --noEmit"
   },
@@ -28,13 +29,9 @@
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@repo/eslint-config": "workspace:*",
-    "@repo/prettier-config": "workspace:*",
     "@repo/tsconfig": "workspace:*",
     "@types/nodemailer": "^6.4.17",
     "@types/react": "catalog:react19",
-    "eslint": "catalog:",
-    "prettier": "catalog:",
     "typescript": "catalog:"
   },
   "prettier": "@repo/prettier-config",
